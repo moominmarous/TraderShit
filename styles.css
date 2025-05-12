@@ -1,0 +1,113 @@
+HTML {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 100%;
+}
+
+div {
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1.5px solid black;
+    background-color: aliceblue;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 400px auto auto 400px;
+    grid-template-rows: auto 550px auto;
+    gap: 10px;
+}
+
+.grid-container>div {
+    text-align: center;
+    border-radius: 5px;
+}
+
+.subdivisionTitle {
+    height: 40px;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 100%;
+    background-color: transparent;
+    color: black;
+}
+
+.item1 {
+    grid-column: 1 / span 5;
+}
+
+.item3 {
+    grid-column: 2 / span 3;
+}
+
+.item5 {
+    grid-column: 1 / span 5;
+}
+
+.mapSection {
+    gap: 10px;
+    width: 100%;
+}
+
+.map {
+    height: 500px;
+    margin-bottom: 10px;
+}
+
+.sidebar {
+    background-color: burlywood;
+    display: inline-block;
+    vertical-align: top;
+    gap: 10px;
+    overflow: hidden;
+    height: 100%;
+    /* justify-content: center; */
+}
+
+.sidebarCardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    max-height: 500px;
+    /* height: min-c; */
+    gap: 10px;
+}
+
+.handCardsContainer {
+    /* height: auto; */
+    display: flex;
+    overflow-x: scroll;
+    gap: 10px;
+}
+
+.hand {
+    width: calc(100vw - 40px);
+    flex-shrink: 0;
+    height: 200px;
+    background-color: burlywood;
+}
+
+.playerInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.playerInfo>DIV {
+    border-radius: 5px;
+    background-color: burlywood;
+}
+
+.card {
+    width: 100px;
+    height: 150px;
+}
