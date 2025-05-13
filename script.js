@@ -155,12 +155,25 @@ const movePoint = () => {
 }
 
 const generateCards = () => {
+    let visitors = document.getElementsByClassName('visitorsContainer')[0].children;
+    Array.from(visitors).forEach((card) => {
+        console.log(card);
+        card.addEventListener("click", (e) => {
+            let selected = document.getElementById('selectedCard');
+            selected.innerHTML = card.innerHTML;
+            selected.classList = card.classList;
+            let description = document.getElementById('selectedDescription');
+            let paragraph = card.querySelector('p'); // Select the first <p> element
+            description.innerText = paragraph ? paragraph.innerText : "No description available";
+        })
+    })
+    console.log(visitors)
 
 }
 
 window.onload = () => {
     VISIBLE = false;
-    generateMap(31, 15);
+    // generateMap(31, 15);
     generateTiles();
     movePoint()
     console.log("generated");
