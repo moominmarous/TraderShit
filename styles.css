@@ -111,6 +111,16 @@ div {
     gap: 10px;
 }
 
+#newArrivals {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-y: auto;
+    max-height: 500px;
+    /* height: min-c; */
+    gap: 10px;
+}
+
 .hand {
     width: 100%;
     height: auto;
@@ -181,4 +191,15 @@ div {
     padding: 0;
     margin: 0;
     border: 0;
+}
+
+
+
+.playerInfo>div>input {
+    border: none;
+    color: black;
+    width: 60px;
+    text-align: center;
+    font-size: medium;
+    background-color: inherit;
 }

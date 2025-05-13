@@ -20,7 +20,9 @@ const DIMENSIONS = {};
 const zoomrange = Array.from({ length: 20 }, (_, i) => parseFloat((0.1 * (i + 1)).toFixed(1)));
 let zoomIndex = 9
 const UNITWIDTH = 20
-const STATS = new Array(4);
+let map;
+let placed;
+let RESOURCESTATS; //key is ELEMENTS[i]
 
 let isDragging = false;
 // let offsetX, offsetY;
@@ -34,7 +36,6 @@ let offset = coordPoint();
 
 
 const drawMap = (map, container) => {
-
 
     for (let i = 0; i < map.length; i += 9) {
         let nine = document.createElement('div')
@@ -51,6 +52,24 @@ const drawMap = (map, container) => {
         nine.addEventListener('click', placeTileHere);
         container.appendChild(nine);
     }
+    //position container:
+    //position map in center:
+    let p = container.parentNode.getBoundingClientRect();
+    let c = container.getBoundingClientRect();
+    console.log(`parent:${p.width},${p.height}`);
+    console.log(`map: ${c.width},${c.height}`);
+    let x = (p.width - c.width) / 2
+    let y = (p.height - c.height) / 2
+    if (c.width > p.width) {
+        x = -(c.width - p.width) / 2
+    }
+    if (c.height > p.height) {
+        y = -(c.height - p.height) / 2
+    }
+    console.log(`calculated position ${x},${y}`);
+    container.position = 'absolute'
+    container.style.top = `${y}px`
+    container.style.left = `${x}px`
 }
 
 
@@ -60,7 +79,7 @@ const drawMap = (map, container) => {
  */
 const generateMap = (width, height) => {
     //make map
-    let map = new Array(width * height * 9);
+    map = new Array(width * height * 9);
     for (let i = 0; i < map.length; i++) {
         let val = Math.floor(Math.random() * 4); // Assign random values to each element
         map[i] = val;
@@ -69,10 +88,9 @@ const generateMap = (width, height) => {
     console.log('');
     let container = document.getElementById('map-space');
     container.innerHTML = ''; //clear
-    // container.style.gridTemplateColumns = `repeat(${DIMENSIONS.map_w}, 1fr)`;
-    // container.style.gridTemplateRows = `repeat(${DIMENSIONS.map_h}, 1fr)`;
-    container.style.width = `${UNITWIDTH * DIMENSIONS.map_w}px`;
-    container.style.height = `${UNITWIDTH * DIMENSIONS.map_h}px`;
+    container.style.gridTemplateColumns = `repeat(${width}, 1fr)`;
+    container.style.gridTemplateRows = `repeat(${height}, 1fr)`;
+
     drawMap(map, container);
     moveMap(container);
     // saveButton(map);
@@ -162,7 +180,11 @@ const placeTileHere = (e) => {
         destinationTile = undefined;
         return;
     }
-    destinationTile = (e.target.parentNode.id == 'placeUs') ? e.target : e.target.parentNode;
+    // destinationTile = (e.target.parentNode.id == 'placeUs') ? e.target : e.target.parentNode;
+    if (e.target.id == 'map-space') return;
+    destinationTile = e.target;
+    if (e.target.className == 'cellUnit') destinationTile = e.target.parentNode;
+    console.log(`destination tile: ${destinationTile.className}`);
     if (selectedTile == undefined) {
         destinationTile.style.opacity = '50%'
         return;
@@ -175,6 +197,19 @@ const placeTileHere = (e) => {
             destinationUnits[i].innerHTML = sourceUnits[i].innerHTML;
             destinationUnits[i].style.backgroundColor = sourceUnits[i].style.backgroundColor;
             destinationUnits[i].style.color = sourceUnits[i].style.color;
+        } else {
+            //resources not covered by path
+            let key = destinationUnits[i].innerHTML;
+            if (ELEMENTS.includes(key)) {
+                console.log('this is a correct key')
+                console.log(`resource key found: ${key}`)
+                if (RESOURCESTATS.has(key)) {
+                    console.log(`updating value of ${parseFloat(RESOURCESTATS.get(key))}`)
+                    RESOURCESTATS.set(key, parseFloat(RESOURCESTATS.get(key)) + 1)
+                } else {
+                    RESOURCESTATS.set(key, 1)
+                }
+            }
         }
     }
     selectedParent = selectedTile.parentNode;
@@ -183,11 +218,48 @@ const placeTileHere = (e) => {
     if (!destinationTile.classList.contains('placed')) {
         destinationTile.classList += ' placed'
     }
+    updateResourceCount();
+    //place complete
     if (selectedParent.children.length == 0) {
         console.log('all tiles gone!')
         generateNewVisitor();
     }
     destinationTile = undefined;
+}
+
+const setupPlayerInfo = () => {
+    let container = document.getElementsByClassName('playerInfo')[0];
+    container.innerHTML = ' <div>PLAYER NAME</div>';
+    container.appendChild((createLabeledStat('TOTAL RESOURCES', 'info-resources')))
+    container.appendChild((createLabeledStat('MOUNTAINS ᨒ', ELEMENTS[0], COLORS[0])))
+    container.appendChild((createLabeledStat('WATER BODIES 𖦹', ELEMENTS[1], COLORS[1])))
+    container.appendChild((createLabeledStat('MEADOWS ෴', ELEMENTS[2], COLORS[2])))
+    container.appendChild((createLabeledStat('FORESTS 𖣂', ELEMENTS[3], COLORS[3])))
+    container.appendChild((createLabeledStat('PATH TILES ☐', ELEMENTS[4], COLORS[4])))
+}
+
+const createLabeledStat = (labeltext, id, color) => {
+    let label = document.createElement('div')
+    label.style.backgroundColor = color;
+    label.innerText = labeltext + ' ';
+    let stat = document.createElement('input');
+    stat.disabled = true;
+    stat.value = 0;
+    stat.id = id;
+    label.appendChild(stat);
+    return label;
+}
+
+const updateResourceCount = () => {
+    let total = 0;
+    for (const [key, value] of RESOURCESTATS.entries()) {
+        console.log(`Key: ${key}, Value: ${value}`);
+        let input = document.getElementById(key);
+        input.value = value;
+        total += value;
+    }
+    document.getElementById('info-resources').value = total;
+    document.getElementById(ELEMENTS[4]).value = document.getElementsByClassName('placed').length;
 }
 
 const movePoint = () => {
@@ -216,9 +288,20 @@ const movePoint = () => {
     }
 }
 
+const moveVisitorsToQueue = () => {
+    let visitorContainer = document.getElementById('visitorsContainer');
+    let newVisitor = document.getElementById('currentVisitor');
+    // let visitorSection = newVisitor.parentNode;
+    visitorContainer.append(newVisitor);
+    visitorContainer.style.display = 'block';
+}
+
 const generateNewVisitor = () => {
-    let visitorContainer = document.getElementsByClassName('visitorsContainer')[0];
-    visitorContainer.append(generateRandomVisitor(Math.floor(Math.random() * 3)));
+    let visitorContainer = document.getElementById('visitorSection');
+    let newVisitor = generateRandomVisitor(Math.floor(Math.random() * 3))
+    newVisitor.className += " centered";
+    newVisitor.id = 'currentVisitor';
+    visitorContainer.append(newVisitor);
 }
 
 const generateCards = () => {
@@ -292,7 +375,9 @@ const mirrorCard = (e) => {
     }
     let selected = document.getElementById('selectedCard');
     selected.innerHTML = card.innerHTML;
-    selected.classList = card.classList;
+    selected.className = card.className;
+    console.log(`${card.className}`)
+    // selected.style.backgroundColor = card.style.backgroundColor;
     let description = document.getElementById('selectedDescription');
     let paragraph = card.querySelector('p'); // Select the first <p> element
     description.innerText = paragraph ? paragraph.innerText : "No description available";
@@ -300,7 +385,10 @@ const mirrorCard = (e) => {
 
 window.onload = () => {
     VISIBLE = false;
-    generateMap(31, 15);
+    RESOURCESTATS = new Map();
+    setupPlayerInfo();
+    // generateMap(31, 15);
+    generateMap(15, 18);
     generateTiles();
     movePoint()
     console.log("generated");
