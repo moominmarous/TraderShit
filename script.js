@@ -177,12 +177,20 @@ const selectTileToPlace = (e) => {
 }
 // MAP DESTINATIONS
 const placeTileHere = (e) => {
-    if ((destinationTile != undefined) || (destinationTile == e.target.parentNode)) {
+    console.log('placeTileHere starts')
+    if (destinationTile == e.target.parentNode) {
+        //this is pressing the same exact tile
         destinationTile.classList.remove('shadow')
         destinationTile.style.transform = 'scale(1)'
         destinationTile.style.zIndex = '0';
         destinationTile = undefined;
-        // return;
+        return;
+    }
+    if ((destinationTile != undefined)) {
+        destinationTile.classList.remove('shadow')
+        destinationTile.style.transform = 'scale(1)'
+        destinationTile.style.zIndex = '0';
+        destinationTile = undefined;
     }
     if (e.target.id == 'map-space') return;
     destinationTile = e.target;
