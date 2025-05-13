@@ -1,0 +1,41 @@
+#map-space {
+    position: absolute;
+    top: -60px;
+    left: -60px;
+    /* background-color: #729e78; */
+    display: grid;
+    grid-template-columns: repeat(31, 60px);
+    grid-template-rows: repeat(15, 60px);
+    gap: 0;
+    /* height: auto; */
+    /* overflow: hidden; */
+    z-index: 0;
+}
+
+.pathSpace {
+    position: relative;
+    display: grid;
+    width: 60px;
+    height: 60px;
+    grid-template-columns: repeat(3, 20px);
+    grid-template-rows: repeat(3, 20px);
+    box-sizing: content-box;
+    user-select: auto;
+    color: inherit;
+    gap: 0;
+    padding: 0;
+}
+
+.cellUnit {
+    width: 20px;
+    height: 20px;
+    background-color: #a4c480;
+    gap: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+    user-select: none;
+    color: inherit;
+    text-align: center;
+    overflow: hidden;
+}

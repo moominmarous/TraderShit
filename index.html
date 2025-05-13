@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trader Shit</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mapstyles.css">
+
 </head>
 
 <body>
@@ -17,36 +19,41 @@
             <span> PATHS: __</span>
             <span> RESOURCES: __ </span>
         </div>
-        <div class="item2 sidebar">
-            <div class="subdivisionTitle">VISITORS</div>
-            <div class="sidebarCardsContainer">
+        <div class="item2 sidebar">VISITORS
+            <div class="visitorsContainer">
                 <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-
             </div>
-            <!-- <div style="width: 100%; height:min-content; border: 1px solid black">VISITORS</div> -->
-            <!-- <div class="card"></div>
-            <div class="card"></div> -->
-            <!-- <div class="card"></div> -->
-            <!-- <div class="card"></div> -->
         </div>
         <div class="item3 mapSection">
-            <div class="map">RESOURCE MAP</div>
-            <div>MY TILES</div>
+            <div class="map" id="map-space"></div>
+            <div class="myTiles" id="placeUs">
+                <!-- pathSpace tiles to be placed -->
+            </div>
         </div>
-        <div class="item4 sidebar">INTERACT</div>
+        <div class="item4 sidebar interactSection">INTERACT
+            <div class="card"></div>
+            <p>Lorem ipsum dolor sit amet description text Lorem ipsum dolor sit amet description text
+                q23awsercdf tvgyahjke,fuwe;iofqh wefio;qhr;g fuiqeRH GNKE;q23awsercdftvgy ahjkewlkef
+                weklfmweklfvmwBVJKAE
+                B
+            </p>
+            <button>BRIBE / HIRE / PURCHASE </button>
+            SELECTED RESOURCES:
+            <div class="myTiles" id="payWith">
+                <div class="pathSpace"></div>
+                <div class="pathSpace"></div>
+                <div class="pathSpace"></div>
+                <div class="pathSpace"></div>
+            </div>
+            <button>IGNORE</button>
+
+        </div>
         <div class="item5 hand">
+            MY CARDS
             <!-- <span class="centered">PLAYER HAND</span> -->
             <div class="handCardsContainer">
+                <div class="card"></div>
+                <div class="card"></div>
                 <div class="card"></div>
                 <div class="card"></div>
                 <div class="card"></div>
@@ -68,6 +75,7 @@
             </div>
         </div>
     </div>
+    <div id="point"></div>
 
     <script src="script.js"></script>
 </body>

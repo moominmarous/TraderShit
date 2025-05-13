@@ -19,23 +19,29 @@ div {
 
 .grid-container {
     display: grid;
+    width: calc(100vw-40px);
+    height: fit-content;
+    /* max-height: calc(100vh - 40px); */
     grid-template-columns: 400px auto auto 400px;
     grid-template-rows: auto 550px auto;
     gap: 10px;
+
 }
 
 .grid-container>div {
     text-align: center;
     border-radius: 5px;
+    z-index: 0;
 }
 
 .subdivisionTitle {
-    height: 40px;
+    /* height: 40px; */
     text-align: center;
     justify-content: center;
     display: flex;
     align-items: center;
     margin: auto;
+    padding-bottom: 10px;
     width: 100%;
     background-color: transparent;
     color: black;
@@ -54,13 +60,32 @@ div {
 }
 
 .mapSection {
-    gap: 10px;
-    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid black;
+    z-index: 1;
+
+}
+
+.myTiles>div {
+    border-radius: 10px;
 }
 
 .map {
-    height: 500px;
+    min-height: 400px;
     margin-bottom: 10px;
+}
+
+.myTiles {
+    position: relative;
+    /* Position the child element relative to the parent */
+    bottom: 0;
+    /* Align the child to the bottom of the parent */
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
 .sidebar {
@@ -70,31 +95,43 @@ div {
     gap: 10px;
     overflow: hidden;
     height: 100%;
+    width: auto;
     /* justify-content: center; */
 }
 
-.sidebarCardsContainer {
+.visitorsContainer {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     overflow-y: auto;
     max-height: 500px;
     /* height: min-c; */
     gap: 10px;
 }
 
-.handCardsContainer {
-    /* height: auto; */
+.hand {
+    width: 100%;
+    height: auto;
+    background-color: burlywood;
     display: flex;
-    overflow-x: scroll;
-    gap: 10px;
+    flex-direction: column;
+    overflow: hidden;
+
 }
 
-.hand {
-    width: calc(100vw - 40px);
-    flex-shrink: 0;
-    height: 200px;
-    background-color: burlywood;
+.handCardsContainer {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 0 10px 0;
+    /* border: 0; */
+    /* background-color: inherit; */
+    height: 100%;
+    width: 100%;
+
 }
+
 
 .playerInfo {
     display: flex;
@@ -109,5 +146,50 @@ div {
 
 .card {
     width: 100px;
+    /* Set a fixed width */
     height: 150px;
+    /* Set a fixed height */
+    flex: 0 0 auto;
+    /* Prevent shrinking or growing */
+
+    background-color: rgb(219, 212, 200);
+    border: 1px solid rgb(50, 51, 53);
+    border-radius: 5px;
+}
+
+.interactSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    padding: 10px;
+}
+
+.interactSection>p {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid white;
+    display: block;
+
+}
+
+.interactSection>.card {
+    width: 100px;
+    height: 150px;
+}
+
+#point {
+    position: absolute;
+    top: -2.5px;
+    left: -2.5px;
+    z-index: 4;
+    width: 5px;
+    height: 5px;
+    background-color: red;
+    border-radius: 5px;
+    padding: 0;
+    margin: 0;
+    border: 0;
 }
