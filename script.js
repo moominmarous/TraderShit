@@ -1,5 +1,6 @@
-const COLORS = Object.freeze(['#7B93AB', '#73B7FF', '#A09A44', '#496643', '#AFBEB7']);
-const ELEMENTS = Object.freeze(['ᨒ', '𖦹', '෴', '𖣂', '░']);
+const COLORS = Object.freeze(['#7B93AB', '#73B7FF', '#A09A44', '#496643', 'burlywood']);
+const TEXTCOLOR = Object.freeze(['black', '#4e4cff', 'black', 'black', 'black']);
+const ELEMENTS = Object.freeze(['ᨒ', '𖦹', '෴', '𖣂', '☐']);
 const PATHS = Object.freeze([
     [-1, 4, -1, 4, 4, 4, -1, 4, -1],
     [-1, 4, -1, -1, 4, 4, -1, 4, -1],
@@ -27,14 +28,17 @@ let offset = coordPoint();
 
 
 const drawMap = (map, container) => {
-    for (let i = 0; i < map.length; i++) {
-        let element = map[i];
+
+
+    for (let i = 0; i < map.length; i += 9) {
         let nine = document.createElement('div')
         nine.className = 'pathSpace';
         for (let j = 0; j < 9; j++) {
+            let element = map[i + j];
             let unit = document.createElement('div');
             unit.className = "cellUnit"
             unit.style.backgroundColor = COLORS[element];
+            unit.style.color = TEXTCOLOR[element];
             unit.innerText = ELEMENTS[element];
             nine.appendChild(unit);
         }
@@ -49,7 +53,7 @@ const drawMap = (map, container) => {
  */
 const generateMap = (width, height) => {
     //make map
-    let map = new Array(width * height);
+    let map = new Array(width * height * 9);
     for (let i = 0; i < map.length; i++) {
         let val = Math.floor(Math.random() * 4); // Assign random values to each element
         map[i] = val;
@@ -114,6 +118,7 @@ const generateTiles = () => {
             if (PATHS[pathNumber][j] != -1) {
                 unit.innerHTML = ELEMENTS[4];
                 unit.style.backgroundColor = COLORS[4]
+                unit.style.color = TEXTCOLOR[4]
             } else {
                 unit.style.backgroundColor = 'transparent'
             }

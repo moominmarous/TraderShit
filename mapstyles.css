@@ -30,6 +30,7 @@
     width: 20px;
     height: 20px;
     background-color: #a4c480;
+    justify-content: center;
     gap: 0;
     padding: 0;
     box-sizing: border-box;
