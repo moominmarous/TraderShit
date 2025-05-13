@@ -164,6 +164,7 @@ const generateTiles = () => {
 
 let selectedTile;
 let destinationTile;
+// PLACE ME TILES
 const selectTileToPlace = (e) => {
     if ((selectedTile != undefined || (selectedTile == e.target.parentNode))) {
         selectedTile.style.opacity = '100%'
@@ -171,25 +172,24 @@ const selectTileToPlace = (e) => {
         selectedTile = undefined;
     } else {
         selectedTile = e.target.parentNode;
-        // selectedTile.style.opacity = '75%'
-        //box-shadow: offset-x offset-y blur-radius spread-radius color;
         selectedTile.classList.add('shadow');
     }
 }
-
+// MAP DESTINATIONS
 const placeTileHere = (e) => {
     if ((destinationTile != undefined) || (destinationTile == e.target.parentNode)) {
         destinationTile.classList.remove('shadow')
         destinationTile.style.transform = 'scale(1)'
         destinationTile.style.zIndex = '0';
         destinationTile = undefined;
-        return;
+        // return;
     }
-    // destinationTile = (e.target.parentNode.id == 'placeUs') ? e.target : e.target.parentNode;
     if (e.target.id == 'map-space') return;
     destinationTile = e.target;
     if (e.target.className == 'cellUnit') destinationTile = e.target.parentNode;
-    console.log(`destination tile: ${destinationTile.className}`);
+    //figured out what the destination tile is.
+
+    // console.log(`destination tile: ${destinationTile.className}`);
     if (selectedTile == undefined && destinationTile.classList.contains('placed')) {
         destinationTile.classList.add('shadow')
         destinationTile.style.transform = 'scale(1.2)'
@@ -198,38 +198,40 @@ const placeTileHere = (e) => {
     }
     //place
     let destinationUnits = Array.from(destinationTile.children);
-    let sourceUnits = Array.from(selectedTile.children);
-    for (let i = 0; i < 9; i++) {
-        if (sourceUnits[i].innerHTML == ELEMENTS[4]) {
-            destinationUnits[i].innerHTML = sourceUnits[i].innerHTML;
-            destinationUnits[i].style.backgroundColor = sourceUnits[i].style.backgroundColor;
-            destinationUnits[i].style.color = sourceUnits[i].style.color;
-        } else {
-            //resources not covered by path
-            let key = destinationUnits[i].innerHTML;
-            if (ELEMENTS.includes(key)) {
-                console.log('this is a correct key')
-                console.log(`resource key found: ${key}`)
-                if (RESOURCESTATS.has(key)) {
-                    console.log(`updating value of ${parseFloat(RESOURCESTATS.get(key))}`)
-                    RESOURCESTATS.set(key, parseFloat(RESOURCESTATS.get(key)) + 1)
-                } else {
-                    RESOURCESTATS.set(key, 1)
+    if (selectedTile != undefined) {
+        let sourceUnits = Array.from(selectedTile.children);
+        for (let i = 0; i < 9; i++) {
+            if (sourceUnits[i].innerHTML == ELEMENTS[4]) {
+                destinationUnits[i].innerHTML = sourceUnits[i].innerHTML;
+                destinationUnits[i].style.backgroundColor = sourceUnits[i].style.backgroundColor;
+                destinationUnits[i].style.color = sourceUnits[i].style.color;
+            } else {
+                //resources not covered by path
+                let key = destinationUnits[i].innerHTML;
+                if (ELEMENTS.includes(key)) {
+                    console.log('this is a correct key')
+                    console.log(`resource key found: ${key}`)
+                    if (RESOURCESTATS.has(key)) {
+                        console.log(`updating value of ${parseFloat(RESOURCESTATS.get(key))}`)
+                        RESOURCESTATS.set(key, parseFloat(RESOURCESTATS.get(key)) + 1)
+                    } else {
+                        RESOURCESTATS.set(key, 1)
+                    }
                 }
             }
         }
-    }
-    selectedParent = selectedTile.parentNode;
-    selectedParent.removeChild(selectedTile);
-    selectedTile = undefined;
-    if (!destinationTile.classList.contains('placed')) {
-        destinationTile.classList += ' placed'
-    }
-    updateResourceCount();
-    //place complete
-    if (selectedParent.children.length == 0) {
-        console.log('all tiles gone!')
-        generateNewVisitor();
+        selectedParent = selectedTile.parentNode;
+        selectedParent.removeChild(selectedTile);
+        selectedTile = undefined;
+        if (!destinationTile.classList.contains('placed')) {
+            destinationTile.classList += ' placed'
+        }
+        updateResourceCount();
+        //place complete
+        if (selectedParent.children.length == 0) {
+            console.log('all tiles gone!')
+            generateNewVisitor();
+        }
     }
     destinationTile = undefined;
 }
