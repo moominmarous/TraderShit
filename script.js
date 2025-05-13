@@ -1,3 +1,9 @@
+const CARDCLASS = Object.freeze(['green', 'yellow', 'red']);
+const CARDINFO = Object.freeze({
+    green: { color: '#BEBC4D', type: 'boon' },
+    yellow: { color: '#E3BC7B', type: 'friend' },
+    red: { color: '#BE4D4D', type: 'foe' }
+});
 const COLORS = Object.freeze(['#7B93AB', '#73B7FF', '#A09A44', '#496643', 'burlywood']);
 const TEXTCOLOR = Object.freeze(['black', '#4e4cff', 'black', 'black', 'black']);
 const ELEMENTS = Object.freeze(['ᨒ', '𖦹', '෴', '𖣂', '☐']);
@@ -42,6 +48,7 @@ const drawMap = (map, container) => {
             unit.innerText = ELEMENTS[element];
             nine.appendChild(unit);
         }
+        nine.addEventListener('click', placeTileHere);
         container.appendChild(nine);
     }
 }
@@ -114,7 +121,6 @@ const moveMap = (container) => {
         container.style.cursor = 'grab';
     });
 };
-
 const generateTiles = () => {
     let container = document.getElementById('placeUs');
     for (let i = 0; i < 5; i++) {
@@ -133,8 +139,51 @@ const generateTiles = () => {
             }
             tile.appendChild(unit);
         }
+        tile.addEventListener('click', selectTileToPlace);
         container.appendChild(tile);
     }
+}
+
+let selectedTile;
+let destinationTile;
+const selectTileToPlace = (e) => {
+    if ((selectedTile != undefined || (selectedTile == e.target.parentNode))) {
+        selectedTile.style.border = '1px solid black';
+        selectedTile = undefined;
+    } else {
+        selectedTile = e.target.parentNode;
+        selectedTile.style.border = '1px solid blue';
+    }
+}
+
+const placeTileHere = (e) => {
+    if ((destinationTile != undefined) || (destinationTile == e.target.parentNode)) {
+        destinationTile.style.opacity = '100%'
+        destinationTile = undefined;
+        return;
+    }
+    destinationTile = (e.target.parentNode.id == 'placeUs') ? e.target : e.target.parentNode;
+    if (selectedTile == undefined) {
+        destinationTile.style.opacity = '50%'
+        return;
+    }
+    //place
+    let destinationUnits = Array.from(destinationTile.children);
+    let sourceUnits = Array.from(selectedTile.children);
+    for (let i = 0; i < 9; i++) {
+        if (sourceUnits[i].innerHTML == ELEMENTS[4]) {
+            destinationUnits[i].innerHTML = sourceUnits[i].innerHTML;
+            destinationUnits[i].style.backgroundColor = sourceUnits[i].style.backgroundColor;
+            destinationUnits[i].style.color = sourceUnits[i].style.color;
+        }
+    }
+    selectedParent = selectedTile.parentNode;
+    selectedParent.removeChild(selectedTile);
+    selectedTile = undefined;
+    // if (!destinationTile.classList.contains('placed')) {
+    // destinationTile.classList += 'placed'
+    // destinationTile.classList += 'placed';
+    // }
 }
 
 const movePoint = () => {
@@ -199,6 +248,38 @@ const saveMapToFile = (map) => {
     console.log('saved map')
 };
 
+const gameLoop = () => {
+    console.log(document.getElementById('placeUs').children.length);
+    if (document.getElementById('placeUs').children.length == 0) {
+        console.log(`generating new visitor...`)
+        let visitorContainer = document.getElementsByClassName('visitorsContainer')[0];
+        visitorContainer.appendChild(generateRandomVisitor(Math.floor(Math.random() * 3)));
+    }
+}
+
+const generateRandomVisitor = (cardType) => {
+    let card = document.createElement('div');
+    cardType = CARDCLASS[cardType];
+    card.className = `card ${cardType}`;
+    card.style.backgroundColor = CARDINFO[cardType].color;
+
+    let h = document.createElement('h4');
+    h.innerHTML = CARDINFO[cardType].type;
+    card.appendChild(h);
+
+    let hearts = Math.floor(Math.random() * 4) + 1;
+    let p = document.createElement('p');
+    p.innerHTML = `${hearts}♡ : ${hearts}⚔︎ && ${hearts.toFixed(1)}⛊`;
+    card.append(p);
+
+    let cost = Math.floor(Math.random() * 4) + 1;
+    p = document.createElement('p');
+    p.innerHTML = `${cost} ${ELEMENTS[cost]} `;
+    card.append(p);
+
+    return card;
+};
+
 window.onload = () => {
     VISIBLE = false;
     generateMap(31, 15);
@@ -206,5 +287,5 @@ window.onload = () => {
     movePoint()
     console.log("generated");
     generateCards();
-    // gameLoop();
+    gameLoop();
 };
