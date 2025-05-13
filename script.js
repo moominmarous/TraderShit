@@ -167,16 +167,21 @@ let destinationTile;
 const selectTileToPlace = (e) => {
     if ((selectedTile != undefined || (selectedTile == e.target.parentNode))) {
         selectedTile.style.opacity = '100%'
+        selectedTile.classList.remove('shadow');
         selectedTile = undefined;
     } else {
         selectedTile = e.target.parentNode;
-        selectedTile.style.opacity = '75%'
+        // selectedTile.style.opacity = '75%'
+        //box-shadow: offset-x offset-y blur-radius spread-radius color;
+        selectedTile.classList.add('shadow');
     }
 }
 
 const placeTileHere = (e) => {
     if ((destinationTile != undefined) || (destinationTile == e.target.parentNode)) {
-        destinationTile.style.opacity = '100%'
+        destinationTile.classList.remove('shadow')
+        destinationTile.style.transform = 'scale(1)'
+        destinationTile.style.zIndex = '0';
         destinationTile = undefined;
         return;
     }
@@ -185,8 +190,10 @@ const placeTileHere = (e) => {
     destinationTile = e.target;
     if (e.target.className == 'cellUnit') destinationTile = e.target.parentNode;
     console.log(`destination tile: ${destinationTile.className}`);
-    if (selectedTile == undefined) {
-        destinationTile.style.opacity = '50%'
+    if (selectedTile == undefined && destinationTile.classList.contains('placed')) {
+        destinationTile.classList.add('shadow')
+        destinationTile.style.transform = 'scale(1.2)'
+        destinationTile.style.zIndex = '2';
         return;
     }
     //place
@@ -229,7 +236,7 @@ const placeTileHere = (e) => {
 
 const setupPlayerInfo = () => {
     let container = document.getElementsByClassName('playerInfo')[0];
-    container.innerHTML = ' <div>PLAYER NAME</div>';
+    container.innerHTML = ' <div>MERCHANT SKOROBOGATOV</div>';
     container.appendChild((createLabeledStat('TOTAL RESOURCES', 'info-resources')))
     container.appendChild((createLabeledStat('MOUNTAINS ᨒ', ELEMENTS[0], COLORS[0])))
     container.appendChild((createLabeledStat('WATER BODIES 𖦹', ELEMENTS[1], COLORS[1])))

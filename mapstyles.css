@@ -26,8 +26,8 @@
 }
 
 .cellUnit {
-    width: 20px;
-    height: 20px;
+    /* width: 20px;
+    height: 20px; */
     background-color: #a4c480;
     justify-content: center;
     gap: 0;
@@ -54,4 +54,8 @@
 #map-space>.pathSpace.placed::after {
     content: none;
     /* Remove the pseudo-element */
+}
+
+.shadow {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }
