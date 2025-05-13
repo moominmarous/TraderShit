@@ -154,10 +154,16 @@ const movePoint = () => {
     }
 }
 
+const generateCards = () => {
+
+}
+
 window.onload = () => {
     VISIBLE = false;
     generateMap(31, 15);
     generateTiles();
     movePoint()
     console.log("generated");
+    generateCards();
+    // gameLoop();
 };
