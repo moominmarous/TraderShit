@@ -68,7 +68,16 @@ const generateMap = (width, height) => {
     container.style.height = `${UNITWIDTH * DIMENSIONS.map_h}px`;
     drawMap(map, container);
     moveMap(container);
+    // saveButton(map);
+    // saveMapToFile(map);
 };
+
+const saveButton = (map) => {
+    let saveButton = document.createElement('button');
+    saveButton.innerText = 'Save Map';
+    saveButton.onclick = () => saveMapToFile(map);
+    document.body.appendChild(saveButton);
+}
 
 const moveMap = (container) => {
     // let point = document.getElementById('point');
@@ -171,9 +180,28 @@ const generateCards = () => {
 
 }
 
+const saveMapToFile = (map) => {
+
+    // Convert the map array to a JSON string
+    const jsonString = JSON.stringify(map, null, 2); // Pretty-print with 2 spaces
+
+    // Create a Blob from the JSON string
+    const blob = new Blob([jsonString], { type: 'application/json' });
+
+    // Create a temporary download link
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'map.json'; // Name of the file to save
+    link.click();
+
+    // Clean up the URL object
+    URL.revokeObjectURL(link.href);
+    console.log('saved map')
+};
+
 window.onload = () => {
     VISIBLE = false;
-    // generateMap(31, 15);
+    generateMap(31, 15);
     generateTiles();
     movePoint()
     console.log("generated");
