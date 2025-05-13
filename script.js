@@ -148,11 +148,11 @@ let selectedTile;
 let destinationTile;
 const selectTileToPlace = (e) => {
     if ((selectedTile != undefined || (selectedTile == e.target.parentNode))) {
-        selectedTile.style.border = '1px solid black';
+        selectedTile.style.opacity = '100%'
         selectedTile = undefined;
     } else {
         selectedTile = e.target.parentNode;
-        selectedTile.style.border = '1px solid blue';
+        selectedTile.style.opacity = '75%'
     }
 }
 
@@ -180,10 +180,14 @@ const placeTileHere = (e) => {
     selectedParent = selectedTile.parentNode;
     selectedParent.removeChild(selectedTile);
     selectedTile = undefined;
-    // if (!destinationTile.classList.contains('placed')) {
-    // destinationTile.classList += 'placed'
-    // destinationTile.classList += 'placed';
-    // }
+    if (!destinationTile.classList.contains('placed')) {
+        destinationTile.classList += ' placed'
+    }
+    if (selectedParent.children.length == 0) {
+        console.log('all tiles gone!')
+        generateNewVisitor();
+    }
+    destinationTile = undefined;
 }
 
 const movePoint = () => {
@@ -212,18 +216,16 @@ const movePoint = () => {
     }
 }
 
+const generateNewVisitor = () => {
+    let visitorContainer = document.getElementsByClassName('visitorsContainer')[0];
+    visitorContainer.append(generateRandomVisitor(Math.floor(Math.random() * 3)));
+}
+
 const generateCards = () => {
     let visitors = document.getElementsByClassName('visitorsContainer')[0].children;
     Array.from(visitors).forEach((card) => {
         console.log(card);
-        card.addEventListener("click", (e) => {
-            let selected = document.getElementById('selectedCard');
-            selected.innerHTML = card.innerHTML;
-            selected.classList = card.classList;
-            let description = document.getElementById('selectedDescription');
-            let paragraph = card.querySelector('p'); // Select the first <p> element
-            description.innerText = paragraph ? paragraph.innerText : "No description available";
-        })
+        card.addEventListener("click", mirrorCard)
     })
     console.log(visitors)
 
@@ -277,8 +279,24 @@ const generateRandomVisitor = (cardType) => {
     p.innerHTML = `${cost} ${ELEMENTS[cost]} `;
     card.append(p);
 
+    card.addEventListener('click', mirrorCard)
+
     return card;
 };
+
+// Show card in interact spot
+const mirrorCard = (e) => {
+    let card = e.target;
+    if (card.parentNode.classList.contains('card')) {
+        card = card.parentNode
+    }
+    let selected = document.getElementById('selectedCard');
+    selected.innerHTML = card.innerHTML;
+    selected.classList = card.classList;
+    let description = document.getElementById('selectedDescription');
+    let paragraph = card.querySelector('p'); // Select the first <p> element
+    description.innerText = paragraph ? paragraph.innerText : "No description available";
+}
 
 window.onload = () => {
     VISIBLE = false;
