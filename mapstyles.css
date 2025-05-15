@@ -59,3 +59,45 @@
 .shadow {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }
+
+.resourceBox {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.resourceBox>div {
+    text-align: center;
+    justify-content: center;
+    border-radius: 5px;
+    height: 30px;
+    width: 30px;
+}
+
+/* const COLORS = Object.freeze(['#7B93AB', '#73B7FF', '#A09A44', '#496643', 'burlywood']);
+const TEXTCOLOR = Object.freeze(['black', '#4e4cff', 'black', 'black', 'black']);
+const ELEMENTS = Object.freeze(['ᨒ', '𖦹', '෴', '𖣂', '☐']); */
+.mountains {
+    background-color: #7B93AB;
+    content: "ᨒ";
+}
+
+.whirlpool {
+    background-color: #73B7FF;
+    content: '𖦹';
+    text-align: center;
+    justify-content: center;
+}
+
+.meadow {
+    background-color: #A09A44;
+    content: '෴';
+    text-align: center;
+    justify-content: center;
+}
+
+.forest {
+    background-color: #496643;
+    content: '𖣂';
+    text-align: center;
+    justify-content: center;
+}

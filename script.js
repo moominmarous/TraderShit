@@ -1,8 +1,8 @@
 const CARDCLASS = Object.freeze(['green', 'yellow', 'red']);
 const CARDINFO = Object.freeze({
-    green: { color: '#BEBC4D', type: 'boon' },
-    yellow: { color: '#E3BC7B', type: 'friend' },
-    red: { color: '#BE4D4D', type: 'foe' }
+    green: { color: '#BEBC4D', type: 'boon', pay: 'pay' },
+    yellow: { color: '#E3BC7B', type: 'friend', pay: 'hire' },
+    red: { color: '#BE4D4D', type: 'foe', pay: 'bribe' }
 });
 const COLORS = Object.freeze(['#7B93AB', '#73B7FF', '#A09A44', '#496643', 'burlywood']);
 const TEXTCOLOR = Object.freeze(['black', '#4e4cff', 'black', 'black', 'black']);
@@ -398,14 +398,22 @@ const mirrorCard = (e) => {
     let description = document.getElementById('selectedDescription');
     let paragraph = card.querySelector('p'); // Select the first <p> element
     description.innerText = paragraph ? paragraph.innerText : "No description available";
+
+    if (card.classList.contains('green')) {
+
+    }
+    //if red: then bribe
+    //if yellow: hire
+    //if green: get
+
 }
 
 window.onload = () => {
     VISIBLE = false;
     RESOURCESTATS = new Map();
     setupPlayerInfo();
-    // generateMap(31, 15);
-    generateMap(15, 18);
+    generateMap(31, 15);
+    // generateMap(15, 18);
     generateTiles();
     movePoint()
     console.log("generated");

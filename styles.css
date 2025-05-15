@@ -203,3 +203,7 @@ div {
     font-size: medium;
     background-color: inherit;
 }
+
+.hidden {
+    display: none;
+}
