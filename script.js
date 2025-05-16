@@ -393,20 +393,71 @@ const mirrorCard = (e) => {
     let selected = document.getElementById('selectedCard');
     selected.innerHTML = card.innerHTML;
     selected.className = card.className;
-    console.log(`${card.className}`)
+    console.log(`${card.classList}`)
+    let cardType = card.classList[1];
     // selected.style.backgroundColor = card.style.backgroundColor;
     let description = document.getElementById('selectedDescription');
     let paragraph = card.querySelector('p'); // Select the first <p> element
     description.innerText = paragraph ? paragraph.innerText : "No description available";
+    showBuyOptions(cardType);
+    let buyButton = document.getElementById('transactionAction');
+    buyButton.disabled = false;
+    console.log(`buyButton.disabled = ${buyButton.disabled}`)
+    buyButton.addEventListener('click', () => transaction(card))
 
-    if (card.classList.contains('green')) {
+    let ignoreButton = document.getElementById('ignoreAction');
+    ignoreButton.disabled = false;
+    ignoreButton.addEventListener('click', () => ignoreCard(card))
+}
 
-    }
-    //if red: then bribe
-    //if yellow: hire
-    //if green: get
+const ignoreCard = (card) => {
+    console.log('ignoring....')
+    let visitors = document.getElementsByClassName('visitorsContainer')[0]
+    visitors.appendChild(card)
+    visitors.classList.remove('hidden')
+    cleanupMirror()
+}
+
+let selectedCards = new Array();
+const transaction = (card) => {
+    console.log('transaction....')
+
+    let handContainer = document.getElementsByClassName('handCardsContainer')[0]
+    handContainer.appendChild(card)
+    cleanupMirror()
 
 }
+
+const cleanupMirror = () => {
+    // cleanup mirror
+    document.getElementById('selectedCard').innerHTML = ''
+    document.getElementById('selectedCard').className = 'card'
+    document.getElementById('selectedDescription').innerHTML = "<p></p>"
+    document.getElementById('transactionAction').disabled = true;
+    document.getElementById('ignoreAction').disabled = true;
+
+}
+
+const showBuyOptions = (cardType) => {
+    let label = document.getElementById('payWithLabel')
+    label.classList.remove('hidden')
+    let payWith = document.getElementById('payWith')
+    payWith.classList.remove('hidden');
+    let transaction = document.getElementById('transactionAction');
+    let buttonText = '';
+    switch (cardType) {
+        case 'red':
+            buttonText = 'BRIBE'
+            break;
+        case 'yellow': buttonText = 'HIRE'
+            break;
+        default: buttonText = 'AQUIRE'
+            break;
+    }
+    transaction.innerHTML = buttonText;
+}
+
+
 
 window.onload = () => {
     VISIBLE = false;

@@ -18,7 +18,8 @@
     <div class="grid-container">
         <div class="item1 playerInfo">
         </div>
-        <div class="item2 sidebar" id="visitorSection">VISITORS
+        <div class="item2 sidebar" id="visitorSection">VISITORS </br>
+            <label id="visitorsContainerLabel">ALL VISITORS</label>
             <div class="visitorsContainer hidden"></div>
         </div>
         <div class="item3 mapSection">
@@ -27,23 +28,17 @@
                 <!-- pathSpace tiles to be placed -->
             </div>
         </div>
-        <div class="item4 sidebar interactSection">INTERACT
+        <div class="item4 sidebar interactSection" id="interactSection">INTERACT
             <div class="card" id="selectedCard"></div>
             <p id="selectedDescription"></p>
-            <button id="transactionAction">BRIBE / HIRE / PURCHASE </button>
-            SELECTED RESOURCES:
-            <div class="resourceBox">
-                <div class="mountains"></div>
-                <div class="whirlpool"></div>
-                <div class="meadow"></div>
-                <div class="forest"></div>
-            </div>
+            <p class="hidden" id="payWithLabel">SELECTED RESOURCES:</p>
             <div class="myTiles hidden" id="payWith">
-                <div class="pathSpace"></div>
-                <div class="pathSpace"></div>
-                <div class="pathSpace"></div>
-                <div class="pathSpace"></div>
+                <div class="mountains">0/5</div>
+                <div class="whirlpool">0/4</div>
+                <div class="meadow">0/0</div>
+                <div class="forest">0/0</div>
             </div>
+            <button id="transactionAction"></button>
             <button id="ignoreAction">IGNORE</button>
 
         </div>
@@ -51,7 +46,6 @@
             MY CARDS
             <!-- <span class="centered">PLAYER HAND</span> -->
             <div class="handCardsContainer">
-                <div class="card"></div>
             </div>
         </div>
     </div>
