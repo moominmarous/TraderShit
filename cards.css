@@ -2,11 +2,29 @@
     width: 100px;
     height: 150px;
     flex: 0 0 auto;
-    padding: 5px;
+    /* padding: 5px; */
     background-color: rgb(219, 212, 200);
     border: 1px solid rgb(50, 51, 53);
     border-radius: 5px;
     display: block;
+    justify-content: center;
+}
+
+.card>.myTiles {
+    gap: 1px;
+    background-color: transparent;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 0;
+    padding: 0;
+    border: none;
+}
+
+.card>.myTiles>div {
+    padding: 5px;
+    width: 100%;
+    border-radius: 3px;
+    height: 30px;
 }
 
 .green {
