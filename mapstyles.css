@@ -100,4 +100,5 @@ const ELEMENTS = Object.freeze(['ᨒ', '𖦹', '෴', '𖣂', '☐']); */
     content: '𖣂';
     text-align: center;
     justify-content: center;
+    color: whitesmoke;
 }

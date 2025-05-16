@@ -23,6 +23,7 @@ const UNITWIDTH = 20
 let map;
 let placed;
 let RESOURCESTATS; //key is ELEMENTS[i]
+let SELECTEDSTATS; //key is ELEMENTS[i]
 
 let isDragging = false;
 // let offsetX, offsetY;
@@ -322,7 +323,7 @@ const moveVisitorsToQueue = () => {
 
 const generateNewVisitor = () => {
     let visitorContainer = document.getElementById('visitorSection');
-    let newVisitor = generateRandomVisitor(Math.floor(Math.random() * 3))
+    let newVisitor = generateRandomCard(Math.floor(Math.random() * 3))
     newVisitor.className += " centered";
     newVisitor.id = 'currentVisitor';
     visitorContainer.append(newVisitor);
@@ -362,11 +363,11 @@ const gameLoop = () => {
     if (document.getElementById('placeUs').children.length == 0) {
         console.log(`generating new visitor...`)
         let visitorContainer = document.getElementsByClassName('visitorsContainer')[0];
-        visitorContainer.appendChild(generateRandomVisitor(Math.floor(Math.random() * 3)));
+        visitorContainer.appendChild(generateRandomCard(Math.floor(Math.random() * 3)));
     }
 }
 
-const generateRandomVisitor = (cardType) => {
+const generateRandomCard = (cardType) => {
     let card = document.createElement('div');
     cardType = CARDCLASS[cardType];
     card.className = `card ${cardType}`;
@@ -383,7 +384,8 @@ const generateRandomVisitor = (cardType) => {
 
     let cost = Math.floor(Math.random() * 4) + 1;
     p = document.createElement('p');
-    p.innerHTML = `${cost} ${ELEMENTS[cost]} `;
+    p.innerHTML = `${cost}${ELEMENTS[Math.floor(Math.random() * 4)]} `;
+    p.className = `cardCost`
     card.append(p);
 
     card.addEventListener('click', mirrorCard)
@@ -401,12 +403,12 @@ const mirrorCard = (e) => {
     selected.innerHTML = card.innerHTML;
     selected.className = card.className;
     console.log(`${card.classList}`)
-    let cardType = card.classList[1];
     // selected.style.backgroundColor = card.style.backgroundColor;
     let description = document.getElementById('selectedDescription');
     let paragraph = card.querySelector('p'); // Select the first <p> element
     description.innerText = paragraph ? paragraph.innerText : "No description available";
-    showBuyOptions(cardType);
+
+    showBuyOptions(card.classList[1]);
     let buyButton = document.getElementById('transactionAction');
     buyButton.disabled = false;
     console.log(`buyButton.disabled = ${buyButton.disabled}`)
@@ -425,14 +427,73 @@ const ignoreCard = (card) => {
     cleanupMirror()
 }
 
-let selectedCards = new Array();
+let selectedTiles = new Set();
 const transaction = (card) => {
     console.log('transaction....')
+    showBuyResourceManager();
+    //get placed path tiles:
+    let placedTiles = document.querySelectorAll('.placed')
 
-    let handContainer = document.getElementsByClassName('handCardsContainer')[0]
-    handContainer.appendChild(card)
-    cleanupMirror()
+    // let cost = getCardCost(card);
+    // let costDiv = card.querySelector('.cardCost');
+    // let costText = costDiv.innerHTML;
 
+
+    placedTiles.forEach((tile) => {
+        tile.removeEventListener('click', placeTileHere);
+        tile.addEventListener('click', () => selectResourcesForTransaction);
+    });
+
+    // let handContainer = document.getElementsByClassName('handCardsContainer')[0]
+    // handContainer.appendChild(card)
+    // cleanupMirror()
+    // SELECTEDSTATS = new Map()
+    // updatePayWithContainer()
+}
+const selectResourcesForTransaction = (e) => {
+    let path;
+    if (e.target.parentNode.classList.contains('placed')) {
+        path = e.target.parentNode;
+    } else if (e.target.classList.contains('placed')) {
+        path = e.target;
+    }
+    if (selectedTiles.has(path)) {
+        selectedTiles.delete(path)
+        path.style.border = '1px solid black';
+    } else {
+        selectedTiles.add(path)
+        path.style.border = '1px solid red';
+    }
+    SELECTEDSTATS = new Map()
+    //update resource info
+    if (selectedTiles == undefined) return
+    selectedTiles.forEach((tile) => {
+        Array.from(tile.children).forEach((unitCell) => {
+            //unitCell.innerText = ELEMENTS[0,1,2,3]
+            let key = unitCell.innerText
+            if (SELECTEDSTATS.has(key)) {
+                SELECTEDSTATS.set(key, SELECTEDSTATS.get(key) + 1);
+            } else {
+                SELECTEDSTATS.set(key, 1);
+            }
+        })
+    })
+    updatePayWithContainer()
+    //
+}
+
+const updatePayWithContainer = () => {
+    let payWithContainer = document.getElementById('payWith')
+    payWithContainer.childNodes[0].innerText = '0';
+    console.log(payWithContainer.children)
+    for (let i = 0; i < 4; i++) {
+        let val = SELECTEDSTATS.get(ELEMENTS[i]);
+        if (val == undefined) val = 0;
+        // if (card == undefined) { payWithContainer.children[i].innerText = `${val}` }
+        // else {
+        payWithContainer.children[i].innerText = `${val}`
+        // }
+    }
 }
 
 const cleanupMirror = () => {
@@ -442,14 +503,24 @@ const cleanupMirror = () => {
     document.getElementById('selectedDescription').innerHTML = "<p></p>"
     document.getElementById('transactionAction').disabled = true;
     document.getElementById('ignoreAction').disabled = true;
+    document.getElementById('payWithLabel').classList.add('hidden');
+    document.getElementById('payWith').classList.add('hidden');
+
+}
+
+const showBuyResourceManager = () => {
+    // let label = document.getElementById('payWithLabel')
+    // label.classList.remove('hidden')
+    let label = document.createElement('div');
+    label.id = 'payWithLabel';
+    label.innerText = 'SELECTED RESOURCES';
+    let payWith = document.getElementById('payWith')
+    payWith.classList.remove('hidden');
+    payWith.parentNode.insertBefore(label, payWith);
 
 }
 
 const showBuyOptions = (cardType) => {
-    let label = document.getElementById('payWithLabel')
-    label.classList.remove('hidden')
-    let payWith = document.getElementById('payWith')
-    payWith.classList.remove('hidden');
     let transaction = document.getElementById('transactionAction');
     let buttonText = '';
     switch (cardType) {
