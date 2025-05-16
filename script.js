@@ -178,6 +178,8 @@ const selectTileToPlace = (e) => {
 // MAP DESTINATIONS
 const placeTileHere = (e) => {
     console.log('placeTileHere starts')
+    // console.assert(destinationTile == undefined)
+    if (destinationTile != undefined && destinationTile.classList.contains('placed')) return
     if (destinationTile == e.target.parentNode) {
         //this is pressing the same exact tile
         destinationTile.classList.remove('shadow')
@@ -204,7 +206,12 @@ const placeTileHere = (e) => {
         destinationTile.style.zIndex = '2';
         return;
     }
-    //place
+    if (selectedTile != undefined && destinationTile.classList.contains('placed')) {
+        console.log('there is a path here already!')
+        destinationTile = undefined;
+        return
+    }
+    //place:
     let destinationUnits = Array.from(destinationTile.children);
     if (selectedTile != undefined) {
         let sourceUnits = Array.from(selectedTile.children);
@@ -217,10 +224,10 @@ const placeTileHere = (e) => {
                 //resources not covered by path
                 let key = destinationUnits[i].innerHTML;
                 if (ELEMENTS.includes(key)) {
-                    console.log('this is a correct key')
-                    console.log(`resource key found: ${key}`)
+                    // console.log('this is a correct key')
+                    // console.log(`resource key found: ${key}`)
                     if (RESOURCESTATS.has(key)) {
-                        console.log(`updating value of ${parseFloat(RESOURCESTATS.get(key))}`)
+                        // console.log(`updating value of ${parseFloat(RESOURCESTATS.get(key))}`)
                         RESOURCESTATS.set(key, parseFloat(RESOURCESTATS.get(key)) + 1)
                     } else {
                         RESOURCESTATS.set(key, 1)
@@ -270,7 +277,7 @@ const createLabeledStat = (labeltext, id, color) => {
 const updateResourceCount = () => {
     let total = 0;
     for (const [key, value] of RESOURCESTATS.entries()) {
-        console.log(`Key: ${key}, Value: ${value}`);
+        // console.log(`Key: ${key}, Value: ${value}`);
         let input = document.getElementById(key);
         input.value = value;
         total += value;
